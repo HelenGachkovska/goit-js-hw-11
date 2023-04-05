@@ -101,6 +101,13 @@ function handlerLoadMoreBtn(e) {
     .then(response => {
       createMarkup(response.data.hits);
       lightbox.refresh();
+// Додаємо прокрутку
+      const { height: cardHeight } =
+        gallery.firstElementChild.getBoundingClientRect();
+      window.scrollBy({
+        top: cardHeight * 2,
+        behavior: 'smooth',
+      });
 
       const totalPage = response.data.totalHits / 40;
 
