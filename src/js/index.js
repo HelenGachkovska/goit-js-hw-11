@@ -124,6 +124,7 @@ function clearForm() {
   gallery.innerHTML = '';
   currentPage = 1;
   searchQuery = null;
+  loadMoreBtnEl.classList.add('hidden');
 }
 
 // Завнтажити більше
