@@ -1,0 +1,60 @@
+body {
+  padding-left: auto;
+  padding-right: auto;
+  margin: 0;
+}
+button {
+  padding: 2px 5px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.search-form {
+  display: flex;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  gap: 5px;
+  justify-content: center;
+  background-color: cornflowerblue;
+  position: sticky;
+  top: 0;
+}
+
+img {
+  width: 100%;
+  height: 160px;
+}
+
+.gallery {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.info {
+  display: flex;
+  justify-content: space-around;
+}
+
+.photo-card {
+  width: 275px;
+  height: auto;
+  box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.5);
+  text-decoration: none;
+  color: black;
+}
+
+.info-item {
+  text-align: center;
+}
+
+.load-more {
+  display: block;
+  margin: 8px auto;
+}
+
+.load-more.hidden {
+  display: none;
+}
