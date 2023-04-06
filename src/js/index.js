@@ -73,7 +73,7 @@ function createMarkup(data) {
 
 // Сабміт форми
 
-function handlerSubmitform(e) {
+async function handlerSubmitform(e) {
   e.preventDefault();
   clearForm();
   searchQuery = e.currentTarget.searchQuery.value.trim();
@@ -81,60 +81,63 @@ function handlerSubmitform(e) {
     Notiflix.Notify.failure('Sorry, you have not entered anything.');
     return;
   } else {
-    fetchImage(searchQuery, currentPage)
-      .then(response => {
-        if (response.data.hits.length === 0) {
-          Notiflix.Notify.failure(
-            'Sorry, there are no images matching your search query. Please try again.'
-          );
-          return;
-        }
-        Notiflix.Notify.success(
-          `Hooray! We found ${response.data.totalHits} images.`
-        );
-        createMarkup(response.data.hits);
-        lightbox.refresh();
+    try {
+      const response = await fetchImage(searchQuery, currentPage);
 
-        if (response.data.hits.length === 40) {
-          loadMore();
-        }
-        return response.data;
-      })
-      .catch(console.warn);
+      if (response.data.hits.length === 0) {
+        Notiflix.Notify.failure(
+          'Sorry, there are no images matching your search query. Please try again.'
+        );
+        return;
+      }
+      Notiflix.Notify.success(
+        `Hooray! We found ${response.data.totalHits} images.`
+      );
+      createMarkup(response.data.hits);
+      lightbox.refresh();
+
+      if (response.data.hits.length === 40) {
+        loadMore();
+      }
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 
 // Клік Load More
 
-function handlerLoadMoreBtn(e) {
+async function handlerLoadMoreBtn(e) {
   e.preventDefault();
 
-  fetchImage(searchQuery, currentPage)
-    .then(response => {
-      createMarkup(response.data.hits);
-      lightbox.refresh();
-      // Додаємо прокрутку
-      const { height: cardHeight } =
-        gallery.firstElementChild.getBoundingClientRect();
-      window.scrollBy({
-        top: cardHeight * 2,
-        behavior: 'smooth',
-      });
+  try {
+    const response = await fetchImage(searchQuery, currentPage);
+    createMarkup(response.data.hits);
+    lightbox.refresh();
+    // Додаємо прокрутку
+    const { height: cardHeight } =
+      gallery.firstElementChild.getBoundingClientRect();
+    window.scrollBy({
+      top: cardHeight * 2,
+      behavior: 'smooth',
+    });
 
-      const totalPage = response.data.totalHits / 40;
+    const totalPage = response.data.totalHits / 40;
 
-      if (totalPage <= currentPage) {
-        loadMoreBtnEl.classList.add('hidden');
-        Notiflix.Notify.success(
-          "We're sorry, but you've reached the end of search results."
-        );
+    if (totalPage <= currentPage) {
+      loadMoreBtnEl.classList.add('hidden');
+      Notiflix.Notify.success(
+        "We're sorry, but you've reached the end of search results."
+      );
 
-        return response.data;
-      }
+      return response.data;
+    }
 
-      currentPage += 1;
-    })
-    .catch(console.error());
+    currentPage += 1;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 // Очищуємо форму
