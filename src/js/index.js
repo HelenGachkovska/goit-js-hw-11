@@ -25,7 +25,12 @@ async function fetchImage(value, page) {
   const KEY = '35069278-a919d6c36aed6148f5a573eb5';
   const searchEl = `?key=${KEY}&q=${value}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`;
 
-  return await axios.get(`${URL}${searchEl}`);
+  try {
+    const response = await axios.get(`${URL}${searchEl}`);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 // Створення розмітки
@@ -73,9 +78,7 @@ function handlerSubmitform(e) {
   clearForm();
   searchQuery = e.currentTarget.searchQuery.value.trim();
   if (searchQuery === '') {
-    Notiflix.Notify.failure(
-      'Sorry, you have not entered anything.'
-    );
+    Notiflix.Notify.failure('Sorry, you have not entered anything.');
     return;
   } else {
     fetchImage(searchQuery, currentPage)
@@ -87,7 +90,8 @@ function handlerSubmitform(e) {
           return;
         }
         Notiflix.Notify.success(
-          `Hooray! We found ${response.data.totalHits} images.`)
+          `Hooray! We found ${response.data.totalHits} images.`
+        );
         createMarkup(response.data.hits);
         lightbox.refresh();
 
@@ -109,7 +113,7 @@ function handlerLoadMoreBtn(e) {
     .then(response => {
       createMarkup(response.data.hits);
       lightbox.refresh();
-// Додаємо прокрутку
+      // Додаємо прокрутку
       const { height: cardHeight } =
         gallery.firstElementChild.getBoundingClientRect();
       window.scrollBy({
