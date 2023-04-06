@@ -71,26 +71,33 @@ function createMarkup(data) {
 function handlerSubmitform(e) {
   e.preventDefault();
   clearForm();
-  searchQuery = e.currentTarget.searchQuery.value;
-  fetchImage(searchQuery, currentPage)
-    .then(response => {
-      if (response.data.hits.length === 0) {
-        Notiflix.Notify.failure(
-          'Sorry, there are no images matching your search query. Please try again.'
-        );
-        return;
-      }
-       Notiflix.Notify.success(
+  searchQuery = e.currentTarget.searchQuery.value.trim();
+  if (searchQuery === '') {
+    Notiflix.Notify.failure(
+      'Sorry, you have not entered anything.'
+    );
+    return;
+  } else {
+    fetchImage(searchQuery, currentPage)
+      .then(response => {
+        if (response.data.hits.length === 0) {
+          Notiflix.Notify.failure(
+            'Sorry, there are no images matching your search query. Please try again.'
+          );
+          return;
+        }
+        Notiflix.Notify.success(
           `Hooray! We found ${response.data.totalHits} images.`)
-      createMarkup(response.data.hits);
-      lightbox.refresh();
+        createMarkup(response.data.hits);
+        lightbox.refresh();
 
-      if (response.data.hits.length === 40) {
-        loadMore();
-      }
-      return response.data;
-    })
-    .catch(console.warn);
+        if (response.data.hits.length === 40) {
+          loadMore();
+        }
+        return response.data;
+      })
+      .catch(console.warn);
+  }
 }
 
 // Клік Load More
