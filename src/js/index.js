@@ -20,12 +20,12 @@ loadMoreBtnEl.addEventListener('click', handlerLoadMoreBtn);
 
 // Шукаємо картинки
 
-function fetchImage(value, page) {
+async function fetchImage(value, page) {
   const URL = 'https://pixabay.com/api/';
   const KEY = '35069278-a919d6c36aed6148f5a573eb5';
   const searchEl = `?key=${KEY}&q=${value}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`;
 
-  return axios.get(`${URL}${searchEl}`);
+  return await axios.get(`${URL}${searchEl}`);
 }
 
 // Створення розмітки
