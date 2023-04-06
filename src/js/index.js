@@ -99,7 +99,7 @@ async function handlerSubmitform(e) {
       if (response.data.hits.length === 40) {
         loadMore();
       }
-      return response.data;
+      
     } catch (error) {
       console.log(error);
     }
@@ -130,10 +130,10 @@ async function handlerLoadMoreBtn(e) {
       Notiflix.Notify.success(
         "We're sorry, but you've reached the end of search results."
       );
+      return;
 
-      return response.data;
     }
-
+    
     currentPage += 1;
   } catch (error) {
     console.log(error);
