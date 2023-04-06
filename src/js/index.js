@@ -80,7 +80,8 @@ function handlerSubmitform(e) {
         );
         return;
       }
-
+       Notiflix.Notify.success(
+          `Hooray! We found ${response.data.totalHits} images.`)
       createMarkup(response.data.hits);
       lightbox.refresh();
 
